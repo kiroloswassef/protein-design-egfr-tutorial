@@ -1,19 +1,23 @@
 # De Novo Protein Design Pipeline: PyMOL → RFdiffusion → ProteinMPNN → AlphaFold
 
-**Author:** Kirolos Abdelmeseh Wassef (Koko)
-**Status:** Learning project / proof-of-concept
-**Environment:** Google Colab (T4 GPU)
+Author: Kirolos Abdelmeseh Wassef 
+Status: Learning project / proof-of-concept
+Environment: Google Colab (T4 GPU)
 
 ## Overview
 
-This is a hands-on learning project built while preparing for an M.Sc. in Chemical Biology at
-Xiamen University (Prof. Liu-Lin Yang's lab), focused on ADC synthesis, peptide synthesis, and
-AI-assisted protein design. The goal was to walk through a complete, minimal AI-driven protein
-design workflow end-to-end — from preparing a real drug target to generating and validating a
-novel protein backbone — using tools that are standard in the field (RFdiffusion, ProteinMPNN,
-AlphaFold) alongside PyMOL for structural preparation and visualization.
+This is a self-directed learning project I built independently, ahead of starting an M.Sc. in
+Chemical Biology at Xiamen University (planned focus: ADC synthesis, peptide synthesis, and
+AI-assisted protein design). It is not affiliated with or conducted under any lab, and is
+not part of any coursework or research program — it's preparatory self-study I did on my own
+before enrollment, to build familiarity with tools I expect to use going forward.
 
-This is **not** a research result — it is a documented tutorial project demonstrating the
+The goal was to walk through a complete, minimal AI-driven protein design workflow end-to-end —
+from preparing a real drug target to generating and validating a novel protein backbone — using
+tools that are standard in the field (RFdiffusion, ProteinMPNN, AlphaFold) alongside PyMOL for
+structural preparation and visualization.
+
+This is not a research result — it is a documented tutorial project demonstrating the
 workflow and tool literacy.
 
 ## Pipeline
@@ -32,7 +36,7 @@ workflow and tool literacy.
 
 ## 1. Target Preparation — PyMOL
 
-Target: **EGFR kinase domain** (PDB: [1M17](https://www.rcsb.org/structure/1M17)), a clinically
+Target: EGFR kinase domain (PDB: [1M17](https://www.rcsb.org/structure/1M17)), a clinically
 relevant receptor tyrosine kinase and a well-known small-molecule/antibody drug target in
 oncology.
 
@@ -50,7 +54,7 @@ Steps performed:
 - Selected and visualized a putative interface region (residues 718–725 and 765–775, near the
   ATP-binding pocket) using `sticks` and `surface` representations
 
-*(see `screenshots/egfr_prepared.png`)*
+(see `screenshots/egfr_prepared.png`)
 
 ## 2. Backbone Generation — RFdiffusion
 
@@ -66,7 +70,7 @@ first proof-of-concept run).
 
 Runtime: ~2.5 min on a Colab T4 GPU.
 
-*(see `screenshots/rfdiffusion_backbone.png`)*
+(see `screenshots/rfdiffusion_backbone.png`)
 
 ## 3. Sequence Design — ProteinMPNN
 
@@ -87,19 +91,19 @@ intended backbone shape. Key metrics:
 
 | Design | pLDDT ↑ | RMSD ↓ | pAE ↓ | Verdict |
 |---|---|---|---|---|
-| **design 0** | 0.881 | **0.909** | 4.983 | **Best** — high confidence, near-perfect match to target backbone |
+| design 0 | 0.881 | 0.909 | 4.983 | Best — high confidence, near-perfect match to target backbone |
 | design 3 | 0.879 | 5.202 | 1.847 | Good confidence, moderate structural deviation |
 | design 5 | 0.876 | 4.832 | 1.784 | Good confidence, moderate structural deviation |
-| design 6 | 0.784 | **8.765** | 7.739 | **Worst** — low confidence, large structural deviation |
+| design 6 | 0.784 | 8.765 | 7.739 | Worst — low confidence, large structural deviation |
 
-- **pLDDT**: AlphaFold's per-residue confidence (0–1, higher = better)
-- **RMSD**: deviation (Å) between the AlphaFold-predicted fold and the RFdiffusion backbone
+- pLDDT: AlphaFold's per-residue confidence (0–1, higher = better)
+- RMSD: deviation (Å) between the AlphaFold-predicted fold and the RFdiffusion backbone
   (lower = the sequence actually folds into the intended shape)
-- **pAE**: predicted alignment error, a measure of confidence in relative domain positioning
+- pAE: predicted alignment error, a measure of confidence in relative domain positioning
   (lower = better)
 
-**Interpretation:** design 0 is the only sequence that both folds with high confidence (pLDDT)
-*and* reproduces the intended backbone geometry (low RMSD) — i.e., the only design that would be
+Interpretation: design 0 is the only sequence that both folds with high confidence (pLDDT)
+and reproduces the intended backbone geometry (low RMSD) — i.e., the only design that would be
 a reasonable candidate to consider for further work. design 6 illustrates a failure mode: a
 sequence can still receive a plausible pLDDT while folding into a completely different,
 extended/unstructured shape (high RMSD) — a reminder that a single metric is not sufficient for
@@ -118,7 +122,7 @@ cmd.color('red', 'worst_design')
 cmd.align('worst_design', 'best_design')
 ```
 
-*(see `screenshots/comparison.png`)*
+(see `screenshots/comparison.png`)
 
 The visual result matches the numerical metrics: design 0 forms a compact, well-packed
 helical bundle typical of a stable folded protein, while design 6 is an extended, loosely
@@ -136,7 +140,7 @@ structured chain — a visibly poor design.
 
 ## Next steps
 
-- [ ] Repeat with **hotspot-conditioned** binder design targeting the EGFR ATP-binding region
+- [ ] Repeat with hotspot-conditioned binder design targeting the EGFR ATP-binding region
       specifically (`ppi.hotspot_res`), rather than unconditional generation
 - [ ] Explore motif scaffolding for a defined functional site
 - [ ] Apply the same pipeline to a target more directly relevant to the ADC/antibody engineering
